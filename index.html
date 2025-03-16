@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -196,6 +196,29 @@
     .add-song button:hover {
       background-color: #555;
     }
+    .leaderboard {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+      width: 300px;
+    }
+    .leaderboard h2 {
+      margin: 0 0 10px 0;
+    }
+    .leaderboard ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .leaderboard li {
+      margin: 5px 0;
+      padding: 5px;
+      background: #444;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -237,6 +260,13 @@
     </div>
   </div>
 
+  <div class="leaderboard">
+    <h2>Leaderboard</h2>
+    <ul id="leaderboardList"></ul>
+    <input type="text" id="playerName" placeholder="Your Name">
+    <button onclick="saveScore()">Save Score</button>
+  </div>
+
   <script>
     let count = 0;
     let clickValue = 1;
@@ -245,16 +275,16 @@
     const resetButton = document.getElementById('reset');
 
     const upgradesData = [
-      { name: 'small boy', desc: '+1 click per click', baseCost: 10, effect: () => clickValue += 1 },
-      { name: 'big boy', desc: '+5 clicks per click', baseCost: 50, effect: () => clickValue += 5 },
-      { name: 'fem boy', desc: 'Auto-clicks every 2s', baseCost: 250, effect: () => startAutoClick(2000, 1) },
-      { name: 'lover boy', desc: 'Double click power', baseCost: 500, effect: () => clickValue *= 2 },
-      { name: 'peasent fem boy', desc: '+10 clicks per click', baseCost: 1000, effect: () => clickValue += 10 },
-      { name: 'Fast fem boy', desc: 'Auto-clicks every 1s', baseCost: 2000, effect: () => startAutoClick(1000, 1) },
-      { name: 'Triple fem boy', desc: 'Triple click power', baseCost: 5000, effect: () => clickValue *= 3 },
-      { name: 'Massive fem boy', desc: '+50 clicks per click', baseCost: 10000, effect: () => clickValue += 50 },
-      { name: '2 femboys', desc: 'Auto-clicks twice per second', baseCost: 25000, effect: () => startAutoClick(500, 2) },
-      { name: 'good femboy', desc: 'Quadruple click power', baseCost: 50000, effect: () => clickValue *= 4 }
+      { name: 'Small Boost', desc: '+1 click per click', baseCost: 10, effect: () => clickValue += 1 },
+      { name: 'Power Tap', desc: '+5 clicks per click', baseCost: 50, effect: () => clickValue += 5 },
+      { name: 'Auto-Clicker', desc: 'Auto-clicks every 2s', baseCost: 250, effect: () => startAutoClick(2000, 1) },
+      { name: 'Double Up', desc: 'Double click power', baseCost: 500, effect: () => clickValue *= 2 },
+      { name: 'Mega Tap', desc: '+10 clicks per click', baseCost: 1000, effect: () => clickValue += 10 },
+      { name: 'Fast Clicker', desc: 'Auto-clicks every 1s', baseCost: 2000, effect: () => startAutoClick(1000, 1) },
+      { name: 'Triple Power', desc: 'Triple click power', baseCost: 5000, effect: () => clickValue *= 3 },
+      { name: 'Massive Tap', desc: '+50 clicks per click', baseCost: 10000, effect: () => clickValue += 50 },
+      { name: 'Rapid Clicker', desc: 'Auto-clicks twice per second', baseCost: 25000, effect: () => startAutoClick(500, 2) },
+      { name: 'Quad Power', desc: 'Quadruple click power', baseCost: 50000, effect: () => clickValue *= 4 }
     ];
 
     const upgradesElement = document.getElementById('upgrades');
@@ -365,6 +395,33 @@
         alert('Please enter both song name and URL');
       }
     }
+
+    function saveScore() {
+      const playerName = document.getElementById('playerName').value;
+      if (playerName) {
+        const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+        leaderboard.push({ name: playerName, score: count });
+        leaderboard.sort((a, b) => b.score - a.score);
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+        displayLeaderboard();
+        document.getElementById('playerName').value = '';
+      } else {
+        alert('Please enter your name');
+      }
+    }
+
+    function displayLeaderboard() {
+      const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+      const leaderboardList = document.getElementById('leaderboardList');
+      leaderboardList.innerHTML = '';
+      leaderboard.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.name}: ${entry.score}`;
+        leaderboardList.appendChild(li);
+      });
+    }
+
+    displayLeaderboard();
   </script>
 
 </body>
