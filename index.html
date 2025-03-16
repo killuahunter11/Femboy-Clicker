@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Femboy Clicker | My Website</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      background: url('https://i.imgur.com/NL8oQVJ.png') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      gap: 50px;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1 img {
+      width: 30px;
+      height: 30px;
+    }
+
+    #count {
+      font-size: 1.8rem;
+      margin: 15px 0;
+    }
+
+    #cookie {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    #cookie:active {
+      transform: scale(0.92);
+    }
+
+    #reset {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ff9f43;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #reset:hover {
+      background-color: #ff7f0e;
+    }
+
+    .upgrades {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .upgrade {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #333;
+    }
+
+    .upgrade:hover {
+      transform: scale(1.03);
+    }
+
+    .upgrade img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .upgrade-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .upgrade-name {
+      font-weight: bold;
+    }
+
+    .upgrade-desc {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .player {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+      width: 300px;
+    }
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .controls button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .controls button:hover {
+      background-color: #555;
+    }
+    .song-list {
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .song-list button {
+      margin: 5px 0;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .song-list button:hover {
+      background-color: #555;
+    }
+    .add-song {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .add-song input {
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: #444;
+      color: #fff;
+    }
+    .add-song button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .add-song button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game">
+    <h1><img src="https://i.imgur.com/a3RTTif.png" alt="icon"> Femboy Clicker <img src="https://i.imgur.com/a3RTTif.png" alt="icon"></h1>
+    <div id="count">Clicks: 0</div>
+    <img id="cookie" src="https://i.imgur.com/UeMfMKC.png" alt="femboy">
+    <button id="reset">Reset</button>
+  </div>
+
+  <div class="upgrades" id="upgrades"></div>
+
+  <div class="player">
+    <h1>Music Player</h1>
+    <audio id="audio" controls>
+      <source id="audioSource" src="https://files.catbox.moe/x2qijw.mp3" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+    <div class="controls">
+      <button onclick="playAudio()">Play</button>
+      <button onclick="pauseAudio()">Pause</button>
+      <button onclick="unpauseAudio()">Unpause</button>
+      <button onclick="toggleSongList()">Songs</button>
+    </div>
+    <div class="song-list" id="songList">
+      <button onclick="changeSong('https://files.catbox.moe/x2qijw.mp3')">Rito Village</button>
+      <button onclick="changeSong('https://files.catbox.moe/nhuv99.mp3')">Divine Beast, Vah Medoh</button>
+      <button onclick="changeSong('https://files.catbox.moe/xf3lq3.mp3')">Great Fairy Fountain</button>
+      <button onclick="changeSong('https://files.catbox.moe/n75m7m.mp3')">Escape</button>
+      <button onclick="changeSong('https://files.catbox.moe/5meiei.mp3')">Phantom</button>
+      <button onclick="changeSong('https://files.catbox.moe/zap9g0.mp3')">Wake Up, Get Up, Get Out There</button>
+      <button onclick="changeSong('https://files.catbox.moe/7aujva.mp3')">Loonboon</button>
+    </div>
+    <div class="add-song">
+      <input type="text" id="songName" placeholder="Song Name">
+      <input type="text" id="songUrl" placeholder="Song URL">
+      <button onclick="addSong()">Add Song</button>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+    let clickValue = 1;
+    const countDisplay = document.getElementById('count');
+    const cookie = document.getElementById('cookie');
+    const resetButton = document.getElementById('reset');
+
+    const upgradesData = [
+      { name: 'small boy', desc: '+1 click per click', baseCost: 10, effect: () => clickValue += 1 },
+      { name: 'big boy', desc: '+5 clicks per click', baseCost: 50, effect: () => clickValue += 5 },
+      { name: 'fem boy', desc: 'Auto-clicks every 2s', baseCost: 250, effect: () => startAutoClick(2000, 1) },
+      { name: 'lover boy', desc: 'Double click power', baseCost: 500, effect: () => clickValue *= 2 },
+      { name: 'peasent fem boy', desc: '+10 clicks per click', baseCost: 1000, effect: () => clickValue += 10 },
+      { name: 'Fast fem boy', desc: 'Auto-clicks every 1s', baseCost: 2000, effect: () => startAutoClick(1000, 1) },
+      { name: 'Triple fem boy', desc: 'Triple click power', baseCost: 5000, effect: () => clickValue *= 3 },
+      { name: 'Massive fem boy', desc: '+50 clicks per click', baseCost: 10000, effect: () => clickValue += 50 },
+      { name: '2 femboys', desc: 'Auto-clicks twice per second', baseCost: 25000, effect: () => startAutoClick(500, 2) },
+      { name: 'good femboy', desc: 'Quadruple click power', baseCost: 50000, effect: () => clickValue *= 4 }
+    ];
+
+    const upgradesElement = document.getElementById('upgrades');
+
+    upgradesData.forEach((upgrade, index) => {
+      upgrade.currentCost = upgrade.baseCost;
+      const div = document.createElement('div');
+      div.className = 'upgrade';
+      div.innerHTML = `
+        <img src="https://i.imgur.com/${['TRvPcpc','MIiWCue','o00wovo','a2qBqw4','ImDjhvc','incdlsW','TLYMsVY','H6PFlvS','q10Nba7','oSa78Nq'][index]}.png" alt="upgrade">
+        <div class="upgrade-info">
+          <div class="upgrade-name">${upgrade.name}</div>
+          <div class="upgrade-desc">${upgrade.desc} (Cost: <span id="cost-${index}">${upgrade.currentCost}</span>)</div>
+        </div>
+      `;
+      div.onclick = () => buyUpgrade(index);
+      div.id = `upgrade-${index}`;
+      div.style.display = index === 0 ? 'flex' : 'none'; // Only show the first upgrade initially
+      upgradesElement.appendChild(div);
+    });
+
+    cookie.addEventListener('click', () => {
+      count += clickValue;
+      updateDisplay();
+    });
+
+    resetButton.addEventListener('click', () => {
+      count = 0;
+      clickValue = 1;
+      upgradesData.forEach((upg, idx) => {
+        upg.currentCost = upg.baseCost;
+        document.getElementById(`cost-${idx}`).textContent = upg.currentCost;
+        document.getElementById(`upgrade-${idx}`).style.display = idx === 0 ? 'flex' : 'none'; // Reset to show only the first upgrade
+      });
+      updateDisplay();
+    });
+
+    function updateDisplay() {
+      countDisplay.textContent = `Clicks: ${count}`;
+    }
+
+    function buyUpgrade(index) {
+      const upgrade = upgradesData[index];
+      if (count >= upgrade.currentCost) {
+        count -= upgrade.currentCost;
+        upgrade.effect();
+        upgrade.currentCost = Math.ceil(upgrade.currentCost * 1.5);
+        document.getElementById(`cost-${index}`).textContent = upgrade.currentCost;
+        updateDisplay();
+        if (index + 1 < upgradesData.length) {
+          document.getElementById(`upgrade-${index + 1}`).style.display = 'flex'; // Unlock the next upgrade
+        }
+      } else {
+        alert('Not enough clicks!');
+      }
+    }
+
+    function startAutoClick(interval, amount) {
+      setInterval(() => {
+        count += amount;
+        updateDisplay();
+      }, interval);
+    }
+
+    const audio = document.getElementById('audio');
+    const songList = document.getElementById('songList');
+
+    function playAudio() {
+      audio.play();
+    }
+
+    function pauseAudio() {
+      audio.pause();
+    }
+
+    function unpauseAudio() {
+      if (audio.paused) {
+        audio.play();
+      }
+    }
+
+    function toggleSongList() {
+      if (songList.style.display === 'none') {
+        songList.style.display = 'flex';
+      } else {
+        songList.style.display = 'none';
+      }
+    }
+
+    function changeSong(src) {
+      const audioSource = document.getElementById('audioSource');
+      audioSource.src = src;
+      audio.load();
+      audio.play();
+    }
+
+    function addSong() {
+      const songName = document.getElementById('songName').value;
+      const songUrl = document.getElementById('songUrl').value;
+      if (songName && songUrl) {
+        const button = document.createElement('button');
+        button.textContent = songName;
+        button.onclick = () => changeSong(songUrl);
+        songList.appendChild(button);
+        document.getElementById('songName').value = '';
+        document.getElementById('songUrl').value = '';
+      } else {
+        alert('Please enter both song name and URL');
+      }
+    }
+  </script>
+
+</body>
+</html>
